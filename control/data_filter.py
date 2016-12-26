@@ -75,7 +75,7 @@ def top_played(in_tag, x):
 		sort_rd = sorted(records.items(), key=lambda item:item[1], reverse=True)
 		tmp = sort_rd
 		if len(sort_rd) > x:
-			tmp = sort_rd[0:x-1]
+			tmp = sort_rd[0:int(x-1)]
 
 		for (k, v) in tmp:
 			top_songs.append(k)
@@ -108,7 +108,7 @@ def newest_release(date_range, x):
 		ctx['new_songs'] = news
 		
 		if len(news) > x:
-			ctx['new_songs'] = news[0:x-1]
+			ctx['new_songs'] = news[0:int(x-1)]
 
 		return ctx
 

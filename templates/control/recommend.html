@@ -43,7 +43,7 @@
 		</tr>
 		{% for each in rec_songs %}
 		<tr align="center">
-			<td><a href='/control/play/{{ each.music_id }}'>{{ each.music_name }}</a></td>
+			<td><a href='/control/play/{{ user_id }}/{{ each.music_id }}'>{{ each.music_name }}</a></td>
 			<td>{{ each.artist }}</td>
 			<td>{{ each.album }}</td>
 		</tr>	

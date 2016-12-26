@@ -77,29 +77,47 @@ def index_view(request):
 		ctx['err'] = error
 		return JsonResponse(ctx)
 
-def play_view(request, music_id):
+def play_view(request, user_id, music_id):
 
 	ctx = {}
 	
 	try:
 		logger.info('play_view, music_id - %s, started' % music_id)
 
+		'''
 		if 'lxy_cookie' not in request.COOKIES:
 			return HttpResponse('Invalid user, do not have lxy_cookie!')
 
 		cookie = request.COOKIES['lxy_cookie']
 		user_id = hashlib.sha1(cookie.encode('utf-8')).hexdigest()
+		'''
 
 		songs = MusicModel.objects.filter(music_id=music_id)
 		if songs:
 			ctx['music_name'] = songs[0].music_name
 			ctx['artist'] = songs[0].artist
 			ctx['album'] = songs[0].album
+			'''
+			url = songs[0].file_url
+			base = url.split("/")[0:-1]
+			name = url.split("/")[-1]
+			logger.info("base - %s, name - %s" % (base, name))
+			ctx['url'] = base + songs[0].artist
+			'''
+			ctx['url'] = songs[0].file_url
 		else:
 			return HttpResponse('Invalid music_id - %s, where do you come from buddy?' % music_id)
 
 		his = UserHistoryModel(music_id=music_id, user_id=user_id)
 		his.save()
+
+		ctx['user_flag'] = 0
+		ctx['user_name'] = 'null'
+
+		user = UserProfileModel.objects.filter(user_id=user_id)
+		if user:
+			ctx['user_flag'] = 1
+			ctx['user_name'] = user[0].user_name
 
 		context = RequestContext(request, ctx)
 		template = loader.get_template('control/play_view.html')
@@ -120,6 +138,15 @@ def search_view(request, user_id):
 		logger.info('search_view, user_id - %s, started' % user_id)
 
 		ctx['user_id'] = user_id
+
+		ctx['user_flag'] = 0
+		ctx['user_name'] = 'null'
+
+		user = UserProfileModel.objects.filter(user_id=user_id)
+		if user:
+			ctx['user_flag'] = 1
+			ctx['user_name'] = user[0].user_name
+
 		context = RequestContext(request, ctx)
 		template = loader.get_template('control/search.html')
 		return HttpResponse(template.render(context))
@@ -157,13 +184,19 @@ def search_data(request, keyword):
 			if keyword in each.music_name:
 				ctx['songs'].append(detail)
 			if keyword in each.artist:
+				'''
 				if each.artist not in art_tmp:
 					ctx['artists'].append(detail)
 					art_tmp.append(each.artist)
+				'''
+				ctx['artists'].append(detail)
 			if keyword in each.album:
+				'''
 				if each.album not in alb_tmp:
 					ctx['albums'].append(detail)
 					alb_tmp.append(each.album)
+				'''
+				ctx['albums'].append(detail)
 
 		ctx['result'] = 'success'
 
@@ -253,6 +286,14 @@ def history_view(request, user_id):
 		ctx['result']= ' success'
 		ctx['his_songs'] = his_songs
 		ctx['user_id'] = user_id
+
+		ctx['user_flag'] = 0
+		ctx['user_name'] = 'null'
+
+		user = UserProfileModel.objects.filter(user_id=user_id)
+		if user:
+			ctx['user_flag'] = 1
+			ctx['user_name'] = user[0].user_name
 
 		context = RequestContext(request, ctx)
 		template = loader.get_template('control/history.html')

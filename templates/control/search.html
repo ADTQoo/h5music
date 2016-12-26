@@ -1,11 +1,11 @@
-<html>
 
+<html>
 <head>
-	<title>search</title>
+	<meta charset="utf-8">
+	<title>搜索 - By 李笑岩</title>
 	<style type="text/css">
-		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:400px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
+		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:100px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
 	</style>
-	<link type="text/css" rel="stylesheet" href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css"/>
 </head>
 
 <body>
@@ -18,14 +18,19 @@
 			<td>
 				<span><a href="/">首页</a></span>
 				<span>|</span>
-				<span><a href="">推荐</a></span>
+				<span><a href="/control/recommend/{{ user_id }}">推荐</a></span>
 				<span>|</span>
-				<span><a href="">历史</a></span>
+				<span><a href="/control/history/view/{{ user_id }}">历史</a></span>
 				<span>|</span>
 				<span>搜索</span>
 				<span>|</span>
-				<span><a href="">注册</a></span>
-				<span>|</span>
+				<span>
+					{% if user_flag == 1%}
+					{{ user_name }} 欢迎回来！
+					{% else %}
+					<a href="/control/user/regview">注册</a>
+					{% endif %}
+				</span>
 			</td>
 		</tr>
 	</table>
@@ -34,110 +39,116 @@
 		<input id='keyword' type="text" name="content" size="100"/>
 		<input class="search_btn" type="button" name="search" value="搜索"/>
 	</form>
-	<div id='artist_div' height='200' width='100%'>
-		<table id='artist_tab' class='display' width='100%'>
-		</table>
+	</hr>
+	<div id="song">
 	</div>
-	<hr color="ffffff">
-	<div id='album_div' height='200' width='100%'>
-		<table id='album_tab' class='display' width='100%'>
-		</table>
+	<div id="album">
 	</div>
-	<hr color="ffffff">
-	<div id='song_div' height='200' width='100%'>
-		<table id='song_tab' class='display' width='100%'>
-		</table>
+	<div id="artist">
 	</div>
-	<hr color="ffffff">
+<!--
+	<h2>为您推荐 {{ rec_tags }}的歌曲</h2>
+	<table width=100%>
+		<tr id="tr2">
+			<th>歌曲</th>
+			<th>歌手</th>
+			<th>专辑</th>
+		</tr>
+		{% for each in rec_songs %}
+		<tr align="center">
+			<td><a href='/control/play/{{ each.music_id }}'>{{ each.music_name }}</a></td>
+			<td>{{ each.artist }}</td>
+			<td>{{ each.album }}</td>
+		</tr>	
+		{% endfor %}
+	</table>
+-->
 	<hr color="949494">
 	<hr size="60" color="949494">
 </body>
 
 <script src="/static/jquery-1.8.3.min.js"></script>
-<script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
 <script>
 
-	$(document).ready(function(){
-		/*
-		$('#artist_tab').DataTable({
-			pageLength: 5,
-		});
-		$('#album_tab').DataTable({
-			pageLength: 5,
-		});
-		*/
-	});
-	
-	function getArtists(art_dicts) {
-		var arr = new Array();
-		for (var i = 0; i < art_dicts.length; i++) {
-			var name = art_dicts[i]['artist'];
-			arr.push([name]);
-		}
-		return arr;
-	}
-
-	function getAlbums(alb_dicts) {
-		var arr = new Array();
-		for (var i = 0; i < alb_dicts.length; i++) {
-			var name = alb_dicts[i]['album'];
-			var artist = alb_dicts[i]['artist'];
-			arr.push([name, artist]);
-		}
-		return arr;
-	}
-
-	function getSongs(song_dicts) {
-		var arr = new Array();
-		for (var i = 0; i < song_dicts.length; i++) {
-			var name = song_dicts[i]['music_name'];
-			var album = song_dicts[i]['album'];
-			var artist = song_dicts[i]['artist'];
-			arr.push([name, album, artist]);
-		}
-		return arr;
-	}
-
 	$(function(){
-
 		$(".search_btn").click(function(){
 			var kw = $('#keyword').val();
-			//console.log(kw)
-
 			var url = '/control/search/data/' + kw;
+
 			$.getJSON(url, function(data){
-				//console.log(data)
 
-				art_list = getArtists(data['artists']);
-				var title_str = '包含关键词 ' + kw + ' 的艺术家';
-				$('#artist_tab').DataTable({
-					data: art_list,
-					columns: [{title: title_str}]
-				});
+				var song_dicts = data['songs'];
+				if (song_dicts.length > 0) {
+					var song_title = '包含关键词 ' + kw + ' 的歌曲';	
+					var s = "<h2>" + song_title + "</h2>";
+					s += "<table width=100%>";
+					s += "<tr id='tr1'><th>歌曲</th><th>歌手</th><th>专辑</th></tr>";
 
-				alb_list = getAlbums(data['albums']);
-				var alb_title = '包含关键词 ' + kw + ' 的专辑';
-				$('#album_tab').DataTable({
-					data: alb_list,
-					columns: [
-						{title: alb_title},
-						{title: '艺术家'}
-					]
-				});
+					for (var i = 0; i < song_dicts.length; i++) {
+						var id = song_dicts[i]['music_id'];
+						var name = song_dicts[i]['music_name'];
+						var album = song_dicts[i]['album'];
+						var artist = song_dicts[i]['artist'];
+					
+						s += "<tr align='center'>";
+						s += "<td><a href='/control/play/{{ user_id }}/" + id + "'>" + name + "</a></td>";
+						s += "<td>" + artist + "</td>";
+						s += "<td>" + album + "</td>";
+						s += "</tr>";
+					}
+					s += "</table><hr>";
+					document.getElementById("song").innerHTML += s;
+				}
 
-				music_list = getSongs(data['songs']);
-				var song_title = '包含关键词 ' + kw + ' 的歌曲';
-				$('#song_tab').DataTable({
-					data: music_list,
-					columns: [
-						{title: song_title},
-						{title: '专辑'},
-						{title: '艺术家'}
-					]
-				});
+				var album_dicts = data['albums'];
+				if (album_dicts.length > 0) {	
+					var alb_title = '包含关键词 ' + kw + ' 的专辑';
+					var s = "<h2>" + alb_title + "</h2>";
+					s += "<table width=100%>";
+					s += "<tr id='tr2'><th>歌曲</th><th>歌手</th><th>专辑</th></tr>";
+					
+					for (var i = 0; i < album_dicts.length; i++) {
+						var id = album_dicts[i]['music_id'];
+						var album = album_dicts[i]['album'];
+						var artist = album_dicts[i]['artist'];
+						var name = album_dicts[i]['music_name'];
+
+						s += "<tr align='center'>";
+						s += "<td><a href='/control/play/{{ user_id }}/" + id + "'>" + name + "</a></td>";
+						s += "<td>" + artist + "</td>";
+						s += "<td>" + album + "</td>";
+						s += "</tr>";
+					}
+					s += "</table><hr>";
+					document.getElementById("album").innerHTML += s;
+				}
+
+				var art_dicts = data['artists'];
+				if (art_dicts.length > 0) {
+					var art_title = '包含关键词 ' + kw + ' 的艺术家';
+					var s = "<h2>" + art_title + "</h2>";
+					s += "<table width=100%>";
+					s += "<tr id='tr2'><th>歌曲</th><th>歌手</th><th>专辑</th></tr>";
+
+					for (var i = 0; i < art_dicts.length; i++) {
+						var id = art_dicts[i]['music_id'];
+						var album = art_dicts[i]['album'];
+						var artist = art_dicts[i]['artist'];
+						var name = art_dicts[i]['music_name'];
+
+						s += "<tr align='center'>";
+						s += "<td><a href='/control/play/{{ user_id }}/" + id + "'>" + name + "</a></td>";
+						s += "<td>" + artist + "</td>";
+						s += "<td>" + album + "</td>";
+						s += "</tr>";
+					}
+					s += "</table><hr>";
+					document.getElementById("artist").innerHTML += s;
+				}
+
 			});
 		});
 	})
-</script>
 
+</script>
 </html>

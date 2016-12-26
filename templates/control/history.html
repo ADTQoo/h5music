@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>首页 - By 李笑岩</title>
+	<title>历史 - By 李笑岩</title>
 	<style type="text/css">
 		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:100px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
 	</style>
@@ -17,13 +17,19 @@
 			<td>
 				<span><a href="/">首页</a></span>
 				<span>|</span>
-				<span><a href="">推荐</a></span>
+				<span><a href="/control/recommend/view/{{ user_id }}">推荐</a></span>
 				<span>|</span>
 				<span>历史</span>
 				<span>|</span>
-				<span><a href="/control/search/view/">搜索</a></span>
+				<span><a href="/control/search/view/{{ user_id }}">搜索</a></span>
 				<span>|</span>
-				<span>TBD</span>
+				<span>
+					{% if user_flag == 1%}
+					{{ user_name }} 欢迎回来！
+					{% else %}
+					<a href="/control/user/regview">注册</a>
+					{% endif %}
+				</span>
 			</td>
 		</tr>
 	</table>
@@ -37,7 +43,7 @@
 		</tr>
 		{% for each in his_songs %}
 		<tr align="center">
-			<td><a href='/control/play/{{ each.music_id }}'>{{ each.music_name }}</a></td>
+			<td><a href='/control/play/{{ user_id }}/{{ each.music_id }}'>{{ each.music_name }}</a></td>
 			<td>{{ each.artist }}</td>
 			<td>{{ each.album }}</td>
 		</tr>	

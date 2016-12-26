@@ -28,11 +28,38 @@
 			from{ transform:rotate(0deg)}
 			to{ transform:rotate(360deg)}
 		}
+		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:100px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
 	</style>
 	<script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
 </head>
 
 <body>
+	<marquee bgcolor = "949494" width = "100%" height = "50" behavior="scroll">
+		<font size="18" color="FFFFFF">音  乐  吧</font>
+	</marquee>
+	<hr color="949494">
+	<table>
+		<tr>
+			<td>
+				<span><a href="/">首页</a></span>
+				<span>|</span>
+				<span><a href="/control/recommend/view/{{ user_id }}">推荐</a></span>
+				<span>|</span>
+				<span><a href="/control/history/view/{{ user_id }}">历史</a></span>
+				<span>|</span>
+				<span><a href="/control/search/view/{{ user_id }}">搜索</a></span>
+				<span>|</span>
+				<span>
+					{% if user_flag == 1%}
+					{{ user_name }} 欢迎回来！
+					{% else %}
+					<a href="/control/user/regview">注册</a>
+					{% endif %}
+				</span>
+			</td>
+		</tr>
+	</table>
+	<hr>
 	<div class="Music">
 		<div class="MusicPlaySound">
 			<img class="MusicPlayBackground" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/zsy.png"/>
@@ -48,8 +75,12 @@
 				<div class="Next icon">下一首</div>
 			</div>
 		</div>
-		<audio src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/music/Yuiki.mp3" autoplay=""></audio>
+		<!--audio src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/music/Yuiki.mp3" autoplay=""-->
+		<audio src="{{ url }}" autoplay="true">
+		</audio>
 	</div>
+	<hr color="949494">
+	<hr size="60" color="949494">
 </body>
 
 <script>
