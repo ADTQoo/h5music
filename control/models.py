@@ -9,6 +9,7 @@ class MusicModel(models.Model):
 	artist = models.CharField(max_length=32, default='init')
 	album = models.CharField(max_length=32, default='init')
 	file_url = models.CharField(max_length=256, default='init')
+	date = models.DateField(null=True)
 
 class MusicTagModel(models.Model):
 

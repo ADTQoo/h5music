@@ -272,7 +272,43 @@ def recommend_view(request, user_id):
 	try:
 		logger.info('recommend_view, user_id - %s' % user_id)
 
-		
+		rs = get_recommend(user_id)
+		if rs['result'] != 'success':
+			ctx['result'] = 'get_recommend got error!'
+			return JsonResponse(ctx)
+
+		songs = rs['rec_songs']
+		tags = ''
+		for each in rs['rec_tags']:
+			tags += '"' + each + '" '
+
+		rec_songs = []
+
+		logger.info(songs)
+		for i in songs:
+			detail = MusicModel.objects.filter(music_id=i)
+			music_name = detail[0].music_name
+			artist = detail[0].artist
+			album = detail[0].album
+
+			rec_songs.append({'music_id':i, 'music_name':music_name, 'artist':artist, 'album':album})
+
+		ctx['result'] = 'success'
+		ctx['rec_songs'] = rec_songs
+		ctx['rec_tags'] = tags
+		ctx['user_id'] = user_id
+
+		ctx['user_flag'] = 0
+		ctx['user_name'] = 'null'
+
+		user = UserProfileModel.objects.filter(user_id=user_id)
+		if user:
+			ctx['user_flag'] = 1
+			ctx['user_name'] = user[0].user_name
+
+		context = RequestContext(request, ctx)
+		template = loader.get_template('control/recommend.html')
+		return HttpResponse(template.render(context))
 
 	except Exception as e:
 		error = traceback.format_exc()
