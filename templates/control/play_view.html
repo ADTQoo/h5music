@@ -1,0 +1,78 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>{{ music_name }} By 李笑岩</title>
+	<style>
+		.Music { background: url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/bg.jpg) -500px 0; padding: 30px 0 0; }
+		.MusicPlaySound { background: url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/yybw.png); width: 536px; height: 524px; margin: 0 auto; position: relative; overflow:hidden; }
+		.MusicPlayBackground { }
+		.MusicPlaySound>img { position: absolute; left: 50%; }
+		.MusicPlayBackground { top: 61px; margin-left: -207px; }
+		.MusicPlayProcess { top: 57px;  margin-left: -211px;}
+		.MusicPlayBox{ position:absolute; width:415px; height:417px; left:50%; top:61px; margin-left:-209px;}
+		.MusicPlayBox .title{ margin:45px auto 0; text-align:center; font-size:24px; color:#fff;}
+		.MusicPlayBox .name{ margin:5px auto 0; text-align:center; font-size:20px; color:#33ffff;}
+		.MusicPicName{ width:120px; position:absolute; left:50%; top:50%; margin:-60px 0 0 -60px; border-radius:100%;}
+		.MusicPicButton{ position:absolute; left:50%; top:50%; margin:-27px 0 0 -27px;}
+		.MusicPlayBox .icon{ width:42px; height:20px; display:block; position:absolute;color:#fff; padding-top:33px; text-align: center; top:290px; font-size:14px;}
+		.MusicPlayBox .Favorite{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/ht.png) no-repeat center top; left:150px; }
+		.MusicPlayBox .Next{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/next.png) no-repeat center top; right:150px;}
+		.MusicPlayProcess.rotate{animation:rotate 30s infinite linear;}
+		.MusicPlayProcess.pause{animation-play-state:paused;
+		-webkit-animation-play-state:paused;}
+		.MusicPicName.PicNameRotate{animation:rotate 4s infinite linear;}
+		.MusicPicName.pause{animation-play-state:paused;
+		-webkit-animation-play-state:paused;}
+		@keyframes rotate{
+			from{ transform:rotate(0deg)}
+			to{ transform:rotate(360deg)}
+		}
+	</style>
+	<script type="text/javascript" src="/static/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+	<div class="Music">
+		<div class="MusicPlaySound">
+			<img class="MusicPlayBackground" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/zsy.png"/>
+			<img class="MusicPlayProcess rotate" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/yyjd.png"/>
+			<div class="MusicPlayBox">
+				<h3 class="title">{{ music_name }}</h3>
+				<p class="name">{{ artist }} - {{ album }}</p>
+				<div class="MusicPic">
+					<!--img class="MusicPicName PicNameRotate" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/yifan.jpg"/-->
+					<img class="MusicPicButton" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/pause.png"/>
+				</div>
+				<div class="Favorite icon">收藏</div>
+				<div class="Next icon">下一首</div>
+			</div>
+		</div>
+		<audio src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/music/Yuiki.mp3" autoplay=""></audio>
+	</div>
+</body>
+
+<script>
+
+	$(function(){
+		var play=1;
+		$(".MusicPicButton").click(function(){
+			if(play==0){
+				$(this).attr("src","http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/pause.png")
+				$(".MusicPlayProcess").removeClass("pause")
+				$(".MusicPicName").removeClass("pause")	
+				$("audio").get(0).play();
+				play=1;
+			}else{
+				$(this).attr("src","http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/play.png")
+				$(".MusicPlayProcess").addClass("pause")
+				$(".MusicPicName").addClass("pause")	
+				play=0;
+				$("audio").get(0).pause();
+			}
+		})
+	})
+
+</script>
+
+</html>

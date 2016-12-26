@@ -1,0 +1,27 @@
+@charset "utf-8";
+.Music { background: url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/bg.jpg) -500px 0; padding: 30px 0 0; }
+.MusicPlaySound { background: url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/yybw.png); width: 536px; height: 524px; margin: 0 auto; position: relative; overflow:hidden; }
+.MusicPlayBackground { }
+.MusicPlaySound>img { position: absolute; left: 50%; }
+.MusicPlayBackground { top: 61px; margin-left: -207px; }
+.MusicPlayProcess { top: 57px;  margin-left: -211px;}
+.MusicPlayBox{ position:absolute; width:415px; height:417px; left:50%; top:61px; margin-left:-209px;}
+.MusicPlayBox .title{ margin:45px auto 0; text-align:center; color:#fff;}
+.MusicPlayBox .name{ margin:5px auto 0; text-align:center; font-size:24px; color:#33ffff;}
+.MusicPicName{ width:120px; position:absolute; left:50%; top:50%; margin:-60px 0 0 -60px; border-radius:100%;}
+.MusicPicButton{ position:absolute; left:50%; top:50%; margin:-27px 0 0 -27px;}
+
+.MusicPlayBox .icon{ width:42px; height:20px; display:block; position:absolute;color:#fff; padding-top:33px; text-align: center; top:290px; font-size:14px;}
+.MusicPlayBox .Favorite{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/ht.png) no-repeat center top; left:150px; }
+.MusicPlayBox .Next{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/next.png) no-repeat center top; right:150px;}
+.MusicPlayProcess.rotate{animation:rotate 30s infinite linear;}
+.MusicPlayProcess.pause{animation-play-state:paused;
+-webkit-animation-play-state:paused;}
+.MusicPicName.PicNameRotate{animation:rotate 4s infinite linear;}
+.MusicPicName.pause{animation-play-state:paused;
+-webkit-animation-play-state:paused;}
+@keyframes rotate{
+	from{ transform:rotate(0deg)}
+	to{ transform:rotate(360deg)}
+	
+}

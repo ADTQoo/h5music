@@ -1,0 +1,143 @@
+<html>
+
+<head>
+	<title>search</title>
+	<style type="text/css">
+		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:400px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
+	</style>
+	<link type="text/css" rel="stylesheet" href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css"/>
+</head>
+
+<body>
+	<marquee bgcolor = "949494" width = "100%" height = "50" behavior="scroll">
+		<font size="18" color="FFFFFF">音  乐  吧</font>
+	</marquee>
+	<hr color="949494">
+	<table>
+		<tr>
+			<td>
+				<span><a href="/">首页</a></span>
+				<span>|</span>
+				<span><a href="">推荐</a></span>
+				<span>|</span>
+				<span><a href="">历史</a></span>
+				<span>|</span>
+				<span>搜索</span>
+				<span>|</span>
+				<span><a href="">注册</a></span>
+				<span>|</span>
+			</td>
+		</tr>
+	</table>
+	<hr>
+	<form>
+		<input id='keyword' type="text" name="content" size="100"/>
+		<input class="search_btn" type="button" name="search" value="搜索"/>
+	</form>
+	<div id='artist_div' height='200' width='100%'>
+		<table id='artist_tab' class='display' width='100%'>
+		</table>
+	</div>
+	<hr color="ffffff">
+	<div id='album_div' height='200' width='100%'>
+		<table id='album_tab' class='display' width='100%'>
+		</table>
+	</div>
+	<hr color="ffffff">
+	<div id='song_div' height='200' width='100%'>
+		<table id='song_tab' class='display' width='100%'>
+		</table>
+	</div>
+	<hr color="ffffff">
+	<hr color="949494">
+	<hr size="60" color="949494">
+</body>
+
+<script src="/static/jquery-1.8.3.min.js"></script>
+<script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
+<script>
+
+	$(document).ready(function(){
+		/*
+		$('#artist_tab').DataTable({
+			pageLength: 5,
+		});
+		$('#album_tab').DataTable({
+			pageLength: 5,
+		});
+		*/
+	});
+	
+	function getArtists(art_dicts) {
+		var arr = new Array();
+		for (var i = 0; i < art_dicts.length; i++) {
+			var name = art_dicts[i]['artist'];
+			arr.push([name]);
+		}
+		return arr;
+	}
+
+	function getAlbums(alb_dicts) {
+		var arr = new Array();
+		for (var i = 0; i < alb_dicts.length; i++) {
+			var name = alb_dicts[i]['album'];
+			var artist = alb_dicts[i]['artist'];
+			arr.push([name, artist]);
+		}
+		return arr;
+	}
+
+	function getSongs(song_dicts) {
+		var arr = new Array();
+		for (var i = 0; i < song_dicts.length; i++) {
+			var name = song_dicts[i]['music_name'];
+			var album = song_dicts[i]['album'];
+			var artist = song_dicts[i]['artist'];
+			arr.push([name, album, artist]);
+		}
+		return arr;
+	}
+
+	$(function(){
+
+		$(".search_btn").click(function(){
+			var kw = $('#keyword').val();
+			//console.log(kw)
+
+			var url = '/control/search/data/' + kw;
+			$.getJSON(url, function(data){
+				//console.log(data)
+
+				art_list = getArtists(data['artists']);
+				var title_str = '包含关键词 ' + kw + ' 的艺术家';
+				$('#artist_tab').DataTable({
+					data: art_list,
+					columns: [{title: title_str}]
+				});
+
+				alb_list = getAlbums(data['albums']);
+				var alb_title = '包含关键词 ' + kw + ' 的专辑';
+				$('#album_tab').DataTable({
+					data: alb_list,
+					columns: [
+						{title: alb_title},
+						{title: '艺术家'}
+					]
+				});
+
+				music_list = getSongs(data['songs']);
+				var song_title = '包含关键词 ' + kw + ' 的歌曲';
+				$('#song_tab').DataTable({
+					data: music_list,
+					columns: [
+						{title: song_title},
+						{title: '专辑'},
+						{title: '艺术家'}
+					]
+				});
+			});
+		});
+	})
+</script>
+
+</html>
