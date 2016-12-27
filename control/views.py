@@ -6,6 +6,7 @@ import logging
 import traceback
 import hashlib
 import datetime
+import random
 
 from .models import *
 from .data_filter import *
@@ -118,6 +119,22 @@ def play_view(request, user_id, music_id):
 		if user:
 			ctx['user_flag'] = 1
 			ctx['user_name'] = user[0].user_name
+
+		rs = get_recommend(user_id)
+		if rs['result'] != 'success':
+			ctx['result'] = 'get_recommend got error!'
+			return JsonResponse(ctx)
+
+		songs = rs['rec_songs']
+		while 1:
+			index = random.randint(0, len(songs)-1)		
+			if songs[index] != music_id:
+				ctx['next_id'] = songs[index]
+				break
+
+		logger.info(songs)
+
+		ctx['user_id'] = user_id
 
 		context = RequestContext(request, ctx)
 		template = loader.get_template('control/play_view.html')

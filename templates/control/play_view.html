@@ -16,8 +16,8 @@
 		.MusicPicName{ width:120px; position:absolute; left:50%; top:50%; margin:-60px 0 0 -60px; border-radius:100%;}
 		.MusicPicButton{ position:absolute; left:50%; top:50%; margin:-27px 0 0 -27px;}
 		.MusicPlayBox .icon{ width:42px; height:20px; display:block; position:absolute;color:#fff; padding-top:33px; text-align: center; top:290px; font-size:14px;}
-		.MusicPlayBox .Favorite{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/ht.png) no-repeat center top; left:150px; }
-		.MusicPlayBox .Next{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/next.png) no-repeat center top; right:150px;}
+		//.MusicPlayBox .Favorite{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/ht.png) no-repeat center top; left:150px; }
+		.MusicPlayBox .Next{background:url(http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/next.png) no-repeat center top; right:185px; }
 		.MusicPlayProcess.rotate{animation:rotate 30s infinite linear;}
 		.MusicPlayProcess.pause{animation-play-state:paused;
 		-webkit-animation-play-state:paused;}
@@ -71,8 +71,8 @@
 					<!--img class="MusicPicName PicNameRotate" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/yifan.jpg"/-->
 					<img class="MusicPicButton" src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/image/music/pause.png"/>
 				</div>
-				<div class="Favorite icon">收藏</div>
-				<div class="Next icon">下一首</div>
+				<!--div class="Favorite icon">收藏</div-->
+				<div id="next_btn" class="Next icon">下一首</div>
 			</div>
 		</div>
 		<!--audio src="http://www.skt1.cn/%E5%A4%87%E4%BB%BD/music/Yuiki.mp3" autoplay=""-->
@@ -101,6 +101,10 @@
 				play=0;
 				$("audio").get(0).pause();
 			}
+		})
+
+		$("#next_btn").click(function() {
+			window.location = "/control/play/{{ user_id }}/{{ next_id }}";
 		})
 	})
 
