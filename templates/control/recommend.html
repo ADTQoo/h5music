@@ -3,7 +3,11 @@
 	<meta charset="utf-8">
 	<title>推荐 - By 李笑岩</title>
 	<style type="text/css">
-		h1{color:"FF9999";background-color:"D7D7D7";text-align:center;height:100px;font-family:"Vijaya";font-size:55px;margin-top:0;padding:150px;}
+		h1{color:"#FFFFFF";background-color:"#949494";text-align:left;height:30px;font-family:"仿宋";font-size:22px;margin-top:0;padding:10px;text-decoration:underline;}
+		h2{color:"#FFFFFF";background-color:"#949494";text-align:center;height:30px;font-family:"宋体";font-size:16px;margin-top:0;padding:10px;}
+		p{font-family:"宋体"；font-size:20px}
+		#tr1{font-family:"宋体";font-size:20px}
+		#tr2{background-color:"#D7D7D7"}
 	</style>
 </head>
 
@@ -33,8 +37,9 @@
 			</td>
 		</tr>
 	</table>
-	<hr>
-	<h2>为您推荐 {{ rec_tags }}的歌曲</h2>
+	<img id="pic" name="ljj" src="/static/media/linjunjie.jpg" width="100%" height="500" alt="单击查看下一张" border="0px">
+	<hr color="949494">
+	<h1>为您推荐 {{ rec_tags }}的歌曲</h1>
 	<table width=100%>
 		<tr id="tr2">
 			<th>歌曲</th>
@@ -42,14 +47,39 @@
 			<th>专辑</th>
 		</tr>
 		{% for each in rec_songs %}
-		<tr align="center">
+		<tr id="{{ each.tr }}" align="center">
 			<td><a href='/control/play/{{ user_id }}/{{ each.music_id }}'>{{ each.music_name }}</a></td>
 			<td>{{ each.artist }}</td>
-			<td>{{ each.album }}</td>
+			<td>《{{ each.album }}》</td>
 		</tr>	
 		{% endfor %}
 	</table>
 	<hr color="949494">
 	<hr size="60" color="949494">
 </body>
+
+<script src="/static/jquery-1.8.3.min.js"></script>
+<script>
+
+	$('#pic').click(function() {
+		var cur = $(this).attr('name');
+		var base_url = '/static/media/';
+		if (cur == 'ljj') {
+			$(this).attr('name', 'zjl');
+			$(this).attr('src', base_url + 'zhoujielun.jpg');
+		} else if (cur == 'zjl') {
+			$(this).attr('name', 'zhm');
+			$(this).attr('src', base_url + 'zhanghuimei.jpg');
+		} else if (cur == 'zhm') {
+			$(this).attr('name', 'syz');
+			$(this).attr('src', base_url + 'sunyanzi.jpg');
+		} else {
+			$(this).attr('name', 'ljj');
+			$(this).attr('src', base_url + 'linjunjie.jpg');
+		}
+	});
+
+</script>
 </html>
+
+

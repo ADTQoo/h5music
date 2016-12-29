@@ -343,13 +343,18 @@ def recommend_view(request, user_id):
 		rec_songs = []
 
 		logger.info(songs)
+		j = 0
 		for i in songs:
 			detail = MusicModel.objects.filter(music_id=i)
 			music_name = detail[0].music_name
 			artist = detail[0].artist
 			album = detail[0].album
-
-			rec_songs.append({'music_id':i, 'music_name':music_name, 'artist':artist, 'album':album})
+			
+			tr = 'null'
+			if j % 2 == 1:
+				tr = 'tr2'
+			rec_songs.append({'tr':tr, 'music_id':i, 'music_name':music_name, 'artist':artist, 'album':album})
+			j += 1
 
 		ctx['result'] = 'success'
 		ctx['rec_songs'] = rec_songs
